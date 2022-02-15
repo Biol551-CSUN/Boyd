@@ -28,4 +28,4 @@ ggplot(data = penguins,
             y = "Body Mass (g)") +
        theme(plot.title = element_text(hjust = 0.5),
              panel.border = element_rect(fill = NA, color = "black")) 
-       
+      ggsave(here("Week_3","Output","penguins.png"))   
