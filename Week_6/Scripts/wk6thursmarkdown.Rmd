@@ -1,0 +1,67 @@
+---
+title: "Penguin Thursday"
+author: "Sophia Boyd"
+date: "3/3/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.path = '../Output/', warning = FALSE, message = FALSE)
+```
+
+## R Markdown
+# Intro
+
+Today we are using penguin data learning markdown
+
+# Load Libraries 
+```{r}
+library(tidyverse)
+library(here)
+library(palmerpenguins)
+library(kableExtra)
+```
+
+# Inspect the Data
+```{r}
+glimpse(penguins)
+```
+
+# Make a plot
+```{r penguin1, fig.width=3, fig.height=4, fig.asp=1.2, fig.align='center', fig.cap="This is a plot of penguins"}
+penguins %>% 
+  ggplot(mapping = aes(x = bill_length_mm, 
+             y = bill_depth_mm,
+             color = species)) + 
+  geom_point() 
+```
+
+# Make a table
+```{r}
+penguins%>%
+  group_by(species) %>% 
+  summarise(billmean = mean(bill_length_mm, na.rm = TRUE)) %>% 
+  kbl() %>% 
+  kable_classic() %>% 
+  row_spec(2, bold = T, color = "white", background = "red")
+```
+
+
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

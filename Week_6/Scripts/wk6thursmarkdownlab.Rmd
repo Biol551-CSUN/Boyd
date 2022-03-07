@@ -1,0 +1,64 @@
+---
+title: "Penguin Markdown (Lab)"
+author: "Sophia Boyd"
+date: "3/3/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.path = '../Output/', message = FALSE, warning = FALSE)
+```
+
+# *Introduction to Penguin Data*
+
+This is going to be a table and plot of penguin data using markdown
+
+
+```{r, echo=FALSE}
+library(tidyverse)
+library(here)
+library(palmerpenguins)
+library(kableExtra)
+library(ggplot2)
+```
+
+# *Inspect the Data*
+```{r,}
+glimpse(penguins)
+```
+
+
+# *Make a Table*
+```{r, echo=FALSE}
+penguinplot <- penguins %>% 
+  drop_na()
+
+penguinplot %>% 
+  group_by(Species = species, Island = island, Sex = sex) %>% # changes order and changes title of columns
+  summarise(AvgLength = mean(bill_length_mm, na.rm = TRUE), 
+         AvgDepth = mean(bill_depth_mm, na.rm = TRUE),
+         AvgBodyMass = mean(body_mass_g, na.rm = TRUE)) %>% # finds averages and creates new columns
+  mutate_if(is.numeric,round, digits = 2) %>% # rounds number to 2 decimal places
+  kbl() %>% # makes the chart
+  kable_classic() %>% # changes theme
+  pack_rows("Adelie",1,6) %>% 
+  pack_rows("Chinstrap",7,8) %>% 
+  pack_rows("Gentoo",9,10) #adds sub rows to divide each species
+```
+
+# *Make a Plot*
+```{r, echo=FALSE}
+penguinplot %>% 
+  ggplot(mapping = aes(x = sex,
+                        y = body_mass_g)) + # x axis plots sex and y axis plots body mass
+  geom_boxplot(aes(fill = species)) + # creates a box plot
+  facet_wrap(~species, scales = "free")+ # creates a new graph for each species
+  labs(title = "Body Mass of Various Penguin Species Based on Sex",
+       x = "Sex of the Penguin",
+       y = "Body Mass (g)", # changes name of title, and axis
+       fill = "Species") + # adds color into the box
+  theme(plot.title = element_text(hjust = 0.5), # centers plot title
+            axis.text = element_text(size = 8), # changes size of text on axis
+            panel.border = element_rect(fill = NA, color = "black"))
+```
+
