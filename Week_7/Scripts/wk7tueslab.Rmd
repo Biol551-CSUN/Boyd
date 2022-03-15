@@ -1,0 +1,63 @@
+---
+title: "San Francisco Trees"
+author: "Sophia Boyd"
+date: "3/8/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# This is going to be a plot of San Francisco trees
+
+### Load Libraries
+```{r}
+library(tidyverse)
+library(here)
+library(maps)
+library(mapdata)
+library(mapproj)
+library(kableExtra)
+```
+
+### Load data
+```{r}
+sf_trees <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-01-28/sf_trees.csv')
+counties<- map_data("county")
+```
+
+### Gathering specific data
+```{r}
+trees <- sf_trees %>% 
+  drop_na()
+trees %>% 
+  select(legal_status, species, address, latitude, longitude) %>% 
+  filter(species == "Acacia melanoxylon :: Blackwood Acacia",
+         longitude > -122.47)
+View(trees)
+
+sf_county <- counties %>% 
+  filter(region == "california",
+         subregion == "san francisco")
+View(sf_county)
+```
+
+### Making the plot
+```{r}
+ggplot()+
+  geom_polygon(data = sf_county, 
+               aes(x = long,
+                   y = lat, 
+                   group = group),
+               fill = "lightgrey",
+               color = "black")+
+   coord_map(projection = "mercator")+
+  theme_minimal()+
+  geom_point(data = trees,
+             aes(x = longitude,
+                 y = latitude))+
+  scale_fill_gradient(trans = "log10")
+
+ggsave(here("Week_7","Output","labmap.pdf"))
+```
+

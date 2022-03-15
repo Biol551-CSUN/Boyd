@@ -1,0 +1,99 @@
+---
+title: "Making a Map"
+author: "Sophia Boyd"
+date: "3/8/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+
+## Load Libraries
+```{r}
+library(tidyverse)
+library(here)
+library(maps)
+library(mapdata)
+library(mapproj)
+```
+
+## Load Data
+```{r}
+popdata<-read_csv(here("Week_7","Data","CApopdata.csv"))
+stars<-read_csv(here("Week_7","Data","stars.csv"))
+```
+
+## Gathering Data
+```{r}
+world<-map_data("world")
+head(world)
+usa<-map_data("usa") #extracts polygons for different countries
+head(usa)
+states<-map_data("state") # get data for states
+head(states)
+counties<-map_data("county")
+head(counties)
+```
+
+## Including Plots
+```{r}
+ggplot()+
+  geom_polygon(data = world,
+               aes(x = long, 
+                   y = lat, 
+                   group = group,
+               fill = region), # fills in polygon with color
+               color = "black") + # outlines in color
+  guides(fill = FALSE)+
+  theme_minimal()+
+  guides(fill = FALSE)+
+  theme(panel.background = element_rect(fill = "lightblue"))+ # fills in ocean (background) blue
+  coord_map(projection = "sinusoidal",
+            xlim = c(-180,180))
+
+CA_data<-states %>% 
+  filter(region == "california")
+
+ggplot() +
+  geom_polygon(data = CA_data,
+               aes(x = long,
+                   y = lat,
+                   group = group,
+               fill = region), # to put a specific color, put outside of aes
+               color = "black") +
+  coord_map() +
+  theme_void() # removes lines and background
+```
+
+## Map of data in counties
+```{r}
+head(counties)[1:3,]
+head(popdata)
+CApop_county<-popdata %>% 
+  select("subregion" = County, Population) %>% 
+  inner_join(counties) %>% 
+  filter(region == "california")
+head(CApop_county)
+
+ggplot()+
+  geom_polygon(data = CApop_county,
+               aes(x = long,
+                   y = lat,
+                   group = group,
+                   fill = Population),
+               color = "black") +
+  geom_point(data = stars,
+             aes(x = long,
+                 y = lat,
+                 size = star_no))+
+  coord_map()+
+  theme_void()+
+  scale_fill_gradient(trans = "log10")+
+  labs(size = "# stars/m2")
+ggsave(here("Week_7","Output","CApop.pdf"))
+```
+

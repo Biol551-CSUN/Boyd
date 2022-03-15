@@ -1,0 +1,66 @@
+---
+title: "Setting up API"
+author: "Sophia Boyd"
+date: "3/10/2022"
+output: html_document
+---
+
+```{r}
+library("ggmap")
+ggmap::register_google(key="AIzaSyDFFGAPt8FB420suh1MEPmzY0t6MYRRzCE", write = TRUE)
+```
+
+## Loading Libraries
+```{r}
+library(ggmap)
+library(tidyverse)
+library(here)
+library(ggsn)
+```
+
+## Load Data
+```{r}
+ChemData<-read_csv(here("Week_7","data","chemicaldata_maunalua.csv"))
+glimpse(ChemData)
+```
+
+## Get base maps
+```{r}
+Oahu <- get_map("Oahu") #extracts info from google maps
+ggmap(Oahu)
+
+WP<-data.frame(lon = -157.7621, lat = 21.27427)
+Map1<-get_map(WP)
+ggmap(Map1)
+
+Map1<-get_map(WP,zoom = 17)
+ggmap(Map1)
+
+Map1<-get_map(WP,zoom = 17, maptype = "satellite")
+ggmap(Map1)
+
+Map1<-get_map(WP,zoom = 17, maptype = "watercolor")
+ggmap(Map1)
+
+Map1<-get_map(WP,zoom = 17, maptype = "satellite")
+ggmap(Map1)+
+  geom_point(data = ChemData,
+             aes(x = Long, y = Lat, color = Salinity),
+             size = 4) +
+  scale_color_viridis_c()+
+  scalebar( x.min = -157.766, x.max = -157.758,
+           y.min = 21.2715, y.max = 21.2785,
+            dist = 250, dist_unit = "m", model = "WGS84", 
+            transform = TRUE, st.color = "white",
+            box.fill = c("yellow", "white"))
+
+geocode("the white house")
+geocode("California State University, Northridge")
+
+```
+
+## 
+
+
+
+
