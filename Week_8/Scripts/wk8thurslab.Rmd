@@ -1,0 +1,68 @@
+---
+title: "Creating functions using data sets"
+author: "Sophia Boyd"
+date: "3/17/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.path = '../Output/', warning = FALSE, message = FALSE)
+```
+# This contains a new function to plot selected data and make conversions of the data set 
+
+
+## Load Libraries
+```{r}
+library(tidyverse)
+library(here)
+library(palmerpenguins)
+library(PNWColors)
+```
+
+## Creating a new data set
+```{r}
+newpenguin <- penguins %>% 
+  drop_na() %>% 
+  filter(sex != "male", # sex will not be male
+         year == "2007") # the data will only be from the year 2007
+```
+
+## Function to plot a filtered version of the penguin dataset
+```{r}
+filteredplot <- function(data = newpenguin, x, y, plot=TRUE ){ #creates the new function
+pal<-pnw_palette("Starfish",3, type = "discrete") # adds a color palette
+
+if(plot==TRUE) { #if the plot is true then a box plot will be created
+ggplot(data, aes(x = {{x}}, y = {{y}}, color = species))+
+  geom_boxplot()+
+  scale_color_manual("Species", values = pal)+
+  theme_bw()+
+  labs(title = "Body Mass for each Penguin Species", 
+       x = "Species",
+       y = "Body Mass (g)")
+}
+else{ # if the plot is not true then the plot will be a violin plot
+ggplot(data, aes(x = {{x}}, y = {{y}}, color = species))+
+  geom_violin()+
+  scale_color_manual("Species", values = pal)+
+  theme_bw()+
+  labs(title = "Body Mass for each Penguin Species", 
+       x = "Species",
+       y = "Body Mass (g)")
+}
+}
+filteredplot(x = species, y = body_mass_g)
+filteredplot(x = species, y = body_mass_g, plot = FALSE) # this allows us to quickly look at the data of female penguins from 2007 on either a box plot or violin plot
+```
+
+## Can find the flipper length in inches
+```{r}
+penguin_flipperin <- function(flipper_length_mm) {
+  penguins <- (flipper_length_mm * 0.0393701)
+  return(penguins)
+}
+penguin_flipperin(181)
+```
+
+
+

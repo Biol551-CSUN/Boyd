@@ -1,0 +1,102 @@
+---
+title: "Practicing learning how to write a function"
+author: "Sophia Boyd"
+date: "3/17/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.path = '../Output/', warning = FALSE, message = FALSE)
+```
+# Today we will learn how to create our own functions
+
+## Load Libraries
+```{r}
+library(tidyverse)
+library(here)
+library(palmerpenguins)
+library(PNWColors)
+```
+
+Create a function
+```{r}
+
+
+farenheit_to_celsius <- function(temp_F) { #name the function & decide the arguments
+  temp_C <- (temp_F - 32) * 5 / 9 #put in the equation 
+  return(temp_C) #decide what is being returned
+}
+
+farenheit_to_celsius(32)
+farenheit_to_celsius(212)
+```
+## Celcius to Kelvin
+```{r}
+
+c_to_k <- function(temp_c) {
+  temp_K <- (temp_c + 273.15)
+  return(temp_K)
+}
+
+c_to_k(10)
+```
+
+## Making plots into a function
+```{r}
+myplot <- function(data, x, y){ #sets up function
+pal <- pnw_palette("Lake", 3, type = "discrete") # uses the color palette
+
+ggplot(penguins, aes(x = {{x}}, y = {{y}}, color = island)) +
+  geom_point() +
+  geom_smooth(method = "lm") + # adds a linear model
+  scale_color_manual("Island", values = pal) + # uses nice colors & changes legend title
+  theme_bw()
+
+
+}
+
+myplot(data = penguins, x = body_mass_g, y = bill_length_mm)
+myplot(data = penguins, x = body_mass_g, y = flipper_length_mm)
+
+myplot<-function(data = penguins, x, y, lines = TRUE){
+  pal<-pnw_palette("Lake",3, type = "discrete")
+
+if(lines == TRUE) {
+ggplot(data, aes(x = {{x}}, y = {{y}}, color = island)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  scale_color_manual("Island", values = pal)+
+  theme_bw()
+}
+else{
+ggplot(data, aes(x = {{x}}, y = {{y}}, color = island))+
+    geom_point()+scale_color_manual("Island", values = pal)+
+    theme_bw()
+}
+}
+
+myplot(x = body_mass_g, y = flipper_length_mm)
+
+myplot(x = body_mass_g, y = flipper_length_mm)+
+  labs(x = "Body_mass (g)",
+       y = "Flipper length (mm)")
+```
+
+## if-else statement
+```{r}
+a <- 4
+b <- 5
+
+if (a > b) {
+  f <- 20
+    } else {
+  f <- 10
+}
+
+f
+```
+
+
+
+
+

@@ -1,0 +1,47 @@
+---
+title: "Practice using animation"
+author: "Sophia Boyd"
+date: "3/17/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.path = '../Output/', warning = FALSE, message = FALSE))
+```
+# This is learning how to use animation functions
+
+
+# Load Libraries
+```{r}
+library(tidyverse)
+library(here)
+library(patchwork)
+library(ggrepel)
+library(gganimate)
+library(magick)
+library(palmerpenguins)
+```
+
+# Patchwork
+```{r}
+p1 <- penguins %>% 
+  ggplot(aes(x = body_mass_g,
+             y = bill_length_mm,
+             color = species)) +
+  geom_point()
+p1 #first plot
+
+p2 <- penguins %>% 
+  ggplot(aes(x = sex,
+             y = body_mass_g,
+             color = species)) +
+  geom_jitter(width = 0.2)
+p2 # second plot
+
+p1+p2 +  #combines both data sets into one
+  plot_layout(guides = 'collect') + #group the legends
+  plot_annotation(tag_levels = 'A') #add labels
+```
+
+
+
