@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, fig.path = '../Output/', warning = FALSE, message = FALSE)
 ```
 # This is going to be a plot of San Francisco trees
 
