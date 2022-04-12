@@ -1,0 +1,44 @@
+---
+title: "Getting Help in R"
+author: "Sophia Boyd"
+date: "4/5/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Today we will be learning how to get help in R
+
+## Load Libraries
+```{r}
+library(tidyverse)
+```
+
+# Making my first reprex
+mpg %>% 
+  ggplot(aes(x = disp, y = hwy)) %>% 
+  geom_point(aes(color = class))
+
+
+# Using real data
+lat,long,star_no
+33.548,-117.805,10
+35.534,-121.083,1
+39.503,-123.743,25
+32.863,-117.24,22
+33.46,-117.671,8
+   # copy data, click addins and paste as tibble
+tibble::tribble(
+    ~lat,    ~long, ~star_no,
+  33.548, -117.805,      10L,
+  35.534, -121.083,       1L,
+  39.503, -123.743,      25L,
+  32.863,  -117.24,      22L,
+   33.46, -117.671,       8L
+  )
+
+
+
+
